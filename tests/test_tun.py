@@ -158,7 +158,7 @@ def test_serialToTUN():
 
     # Start a TUN Monitor class
     isRunning = threading.Event()
-    # isRunning.set()
+    isRunning.set()
     TUNMonitor = faraday.Monitor(serialPort=serialPort,
                                  isRunning=isRunning)
 
