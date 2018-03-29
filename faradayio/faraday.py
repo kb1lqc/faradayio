@@ -308,3 +308,21 @@ class Output(asyncio.Protocol):
     def resume_writing(self):
         print(self.transport.get_write_buffer_size())
         print('resume writing')
+
+class SerialAsyncClass(object):
+    """An asyncio serial port test class"""
+    def __init__(self,
+                 loop,
+                 port='/dev/ttyUSB0',
+                 baudrate=115200,
+                 timeout=0,
+                 write_timeout=0
+                 ):
+        """Creates an asyncio serial port"""
+        self.coro = serial_asyncio.create_serial_connection(loop,
+                                                            Output,
+                                                            port,
+                                                            baudrate=baudrate,
+                                                            timeout=timeout,
+                                                            write_timeout=write_timeout
+                                                            )

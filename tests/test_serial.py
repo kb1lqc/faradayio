@@ -97,13 +97,15 @@ def test_serialParamaterizedSynchReceive(test_input):
 
 def test_serialAsyncio():
     # Create class object necessary for test
-    serialInstance = faraday.SerialTestClass()
+    # serialInstance = faraday.SerialTestClass()
     slip = sliplib.Driver()
 
 
     loop = asyncio.get_event_loop()
-    coro = serial_asyncio.create_serial_connection(loop, faraday.Output, '/dev/ttyUSB0', baudrate=115200)
-    loop.run_until_complete(coro)
+    # coro = serial_asyncio.create_serial_connection(loop, faraday.Output, '/dev/ttyUSB0', baudrate=115200)
+    serialClass = faraday.SerialAsyncClass(loop)
+    loop.run_until_complete(serialClass.coro)
+    # loop.run_until_complete(coro)
     loop.run_forever()
     loop.close()
 
