@@ -1,8 +1,11 @@
 import pytest
 import sliplib
 import string
+import asyncio
+import serial_asyncio
 
 from faradayio import faraday
+
 # from tests.serialtestclass import SerialTestClass
 
 
@@ -91,3 +94,17 @@ def test_serialParamaterizedSynchReceive(test_input):
     for item in faradayRadio.receive(res):
         # Should be only one item
         assert item == test_input
+
+def test_serialAsyncio():
+    # Create class object necessary for test
+    serialInstance = faraday.SerialTestClass()
+    slip = sliplib.Driver()
+
+
+    loop = asyncio.get_event_loop()
+    coro = serial_asyncio.create_serial_connection(loop, faraday.Output, '/dev/ttyUSB0', baudrate=115200)
+    loop.run_until_complete(coro)
+    loop.run_forever()
+    loop.close()
+
+    assert 1==1
