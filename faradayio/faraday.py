@@ -309,6 +309,19 @@ class Output(asyncio.Protocol):
         print(self.transport.get_write_buffer_size())
         print('resume writing')
 
+class Input(asyncio.Protocol):
+# May not need this. In reality I wonder if the Output class can actually be
+# the serial/TUN interface that performs serial<->TUN functionality and is simply scheduled
+    def __init__(self):
+        super().__init__()
+        self._transport = None
+
+    def connection_made(self, transport):
+        self._transport = transport
+
+    def data_received(self, data):
+        self._transport.write(data)
+
 class SerialAsyncClass(object):
     """An asyncio serial port test class"""
     def __init__(self,
@@ -319,10 +332,10 @@ class SerialAsyncClass(object):
                  write_timeout=0
                  ):
         """Creates an asyncio serial port"""
-        self.coro = serial_asyncio.create_serial_connection(loop,
-                                                            Output,
-                                                            port,
-                                                            baudrate=baudrate,
-                                                            timeout=timeout,
-                                                            write_timeout=write_timeout
-                                                            )
+        self.coroOut = serial_asyncio.create_serial_connection(loop,
+                                                               Output,
+                                                               port,
+                                                               baudrate=baudrate,
+                                                               timeout=timeout,
+                                                               write_timeout=write_timeout
+                                                               )
